@@ -95,6 +95,14 @@ def print_block(t0, ix, rate, counts, crc_total, st, last_obs):
         print("   " + "-" * 42)
         print(f"   {'Distance':<11}{dist:>12.4f} m   {ftin(dist):>12}")
         print(f"   {'Horizontal':<11}{horiz:>12.4f} m   {ftin(horiz):>12}")
+        # Horizontal slope = bearing of the N/E vector (deg from North, CW to East)
+        bearing = math.degrees(math.atan2(e, n)) % 360.0
+        # Vertical slope = inclination from horizontal distance and Down
+        vert = math.degrees(math.atan2(d, horiz)) if (horiz or d) else 0.0
+        grade = f"{d / horiz * 100:+.1f}%" if horiz > 1e-9 else "vertical"
+        print("   " + "-" * 42)
+        print(f"   {'Horiz slope':<11}{bearing:>12.1f} deg  (bearing N->E)")
+        print(f"   {'Vert slope':<11}{vert:>+12.1f} deg  ({grade}, + = rover below base)")
     else:
         print(" Relative position: (waiting for a valid relative solution)")
     print("=" * 60)
